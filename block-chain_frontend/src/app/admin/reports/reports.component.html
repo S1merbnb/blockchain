@@ -1,0 +1,102 @@
+<div class="reports container">
+  <header class="page-header">
+    <h2>Reports</h2>
+    <p class="subtitle">Analysis dashboard — use filters to narrow results. Export CSV of the filtered dataset.</p>
+  </header>
+
+  <section class="filters card" style="display:flex;gap:0.6rem;align-items:end;flex-wrap:wrap;margin-bottom:1rem;">
+    <div class="filter-group">
+      <label>Region</label>
+      <select [(ngModel)]="filterRegion">
+        <option value="All">All</option>
+        <option *ngFor="let r of regions" [value]="r">{{ r }}</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Start</label>
+      <input type="date" [(ngModel)]="startDate" />
+    </div>
+
+    <div class="filter-group">
+      <label>End</label>
+      <input type="date" [(ngModel)]="endDate" />
+    </div>
+
+    <div style="margin-left:auto;display:flex;gap:0.6rem;">
+      <button class="btn btn-ghost" (click)="filterRegion='All'; startDate=null; endDate=null">Clear</button>
+      <button class="btn btn-primary" (click)="exportCSV()">Export CSV</button>
+    </div>
+  </section>
+
+  <section class="card charts" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+    <div class="card">
+      <h3>Confirmed vs Cancelled</h3>
+      <p class="muted">Counts in the selected range</p>
+      <div class="chart-area">
+        <ng-container *ngIf="filtered.length; else noData">
+          <div style="display:flex;gap:1rem;align-items:center;justify-content:center;padding:1rem 0;">
+            <div style="text-align:center;margin-right:12px;">
+              <div style="font-weight:800;font-size:1.6rem;color:var(--primary)">{{ confirmedVsCancelled().confirmed }}</div>
+              <div class="muted">Confirmed</div>
+            </div>
+            <div style="text-align:center;margin-right:12px;">
+              <div style="font-weight:800;font-size:1.6rem;color:var(--danger)">{{ confirmedVsCancelled().cancelled }}</div>
+              <div class="muted">Cancelled</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-weight:800;font-size:1.6rem;color:var(--muted)">{{ confirmedVsCancelled().pending }}</div>
+              <div class="muted">Pending</div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Events by weather type</h3>
+      <p class="muted">Distribution of events grouped by weather</p>
+      <div class="chart-area" *ngIf="eventsByWeather().length; else noData">
+        <div *ngFor="let pair of eventsByWeather()" class="weather-row">
+          <div class="label">{{ pair[0] }}</div>
+          <div class="bar-wrap">
+            <div class="bar-fill" [style.width.%]="(pair[1] / (filtered.length || 1)) * 100"> </div>
+          </div>
+          <div class="count">{{ pair[1] }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card table-card" style="margin-top:1rem;">
+    <h3>Events</h3>
+    <p class="muted">Filtered events (latest first)</p>
+    <div class="table-wrap">
+      <table class="events-table">
+        <thead>
+          <tr>
+            <th>Event ID</th>
+            <th>Region</th>
+            <th>Date</th>
+            <th>Weather</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let e of filtered">
+            <td class="mono">{{ e.id }}</td>
+            <td>{{ e.region }}</td>
+            <td>{{ e.dateDetected | date:'medium' }}</td>
+            <td>{{ e.weather }}</td>
+            <td><span class="badge" [ngStyle]="{ 'background': e.status === 'Confirmed' ? 'var(--primary)' : (e.status === 'Cancelled' ? 'var(--danger)' : 'var(--muted)') }">{{ e.status }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <ng-template #noData>
+    <div class="muted" style="padding:1rem">No data for the selected filters.</div>
+  </ng-template>
+</div>
+<p>reports works!</p>

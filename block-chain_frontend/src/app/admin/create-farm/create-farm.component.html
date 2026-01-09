@@ -1,0 +1,78 @@
+<div class="create-farm-container">
+	<div class="toolbar">
+		<button class="btn add" (click)="openModal()">+ Add Farm</button>
+		<input class="search" placeholder="Search by farm, farmer or phone" (input)="onSearch($event)" />
+	</div>
+
+	<!-- Modal -->
+	<div class="modal-backdrop" *ngIf="showModal">
+		<div class="modal">
+			<header>
+				<h3>{{ editingFarm ? 'Edit Farm' : 'Add Farm' }}</h3>
+				<button class="close" (click)="closeModal()">✕</button>
+			</header>
+			<form (submit)="onSave(farmForm); $event.preventDefault()" #farmForm>
+				<div class="modal-body">
+					<div class="form-grid">
+						<label>Farm Name*<input name="farmName" [value]="editingFarm?.farmName || ''" required /></label>
+						<label>Farmer Name<input name="farmerName" [value]="editingFarm?.farmerName || ''" /></label>
+						<label>Phone Number<input name="phone" [value]="editingFarm?.phone || ''" /></label>
+						<label>Area (ha)<input name="area" type="number" step="0.01" [value]="editingFarm?.area || ''" /></label>
+						<label>Crop Type<input name="cropType" value="Olive" readonly /></label>
+						<label>Notes<textarea name="notes">{{ editingFarm?.notes || '' }}</textarea></label>
+					</div>
+
+					<div class="map-section">
+						<div class="map-ops">
+							<button type="button" (click)="startDrawing()" [disabled]="drawing">Start Drawing</button>
+							<button type="button" (click)="finishDrawing()" [disabled]="!drawing">Finish</button>
+							<button type="button" (click)="clearDrawing()">Clear</button>
+							<small class="hint">Click on the map to add polygon points. Close polygon with Finish.</small>
+						</div>
+						<div #modalMap id="modalMap" class="modal-map"></div>
+					</div>
+				</div>
+				<footer class="modal-actions">
+					<button class="btn" type="button" (click)="closeModal()">Cancel</button>
+					<button class="btn primary" type="submit">Save</button>
+				</footer>
+			</form>
+		</div>
+	</div>
+
+	<!-- Table -->
+	<div class="table-wrap">
+		<table class="farm-table">
+			<thead>
+				<tr>
+					<th (click)="setSort('farmName')">Farm Name</th>
+					<th (click)="setSort('farmerName')">Farmer Name</th>
+					<th (click)="setSort('phone')">Phone</th>
+					<th (click)="setSort('area')">Area (ha)</th>
+					<th>Crop Type</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let f of filteredFarms(); trackBy: trackById" (mouseenter)="highlight(f, true)" (mouseleave)="highlight(f, false)">
+					<td>{{ f.farmName }}</td>
+					<td>{{ f.farmerName }}</td>
+					<td>{{ f.phone }}</td>
+					<td>{{ f.area }}</td>
+					<td>{{ f.cropType }}</td>
+					<td class="actions">
+						<button class="btn" (click)="edit(f)">Edit</button>
+						<button class="btn danger" (click)="delete(f)">Delete</button>
+						<button class="btn" (click)="viewOnMap(f)">View on Map</button>
+					</td>
+				</tr>
+				<tr *ngIf="filteredFarms().length === 0"><td colspan="6" class="no-data">No farms yet</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Main map -->
+	<div class="main-map-wrap">
+		<div #mainMap id="mainMap" class="main-map"></div>
+	</div>
+</div>

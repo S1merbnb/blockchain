@@ -1,0 +1,96 @@
+<footer class="site-footer">
+  <div class="footer-container container">
+    <!-- Top Section -->
+    <div class="footer-top">
+      <!-- Brand Column -->
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/assets/images/logo.png" alt="Olive Insurance logo" />
+        </div>
+        <p class="footer-description">
+          Smart agricultural insurance powered by AI, blockchain, and real-time weather monitoring.
+        </p>
+        <div class="footer-social">
+          <a 
+            *ngFor="let social of socialLinks" 
+            [href]="social.url" 
+            [title]="social.label"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-link">
+            {{ social.icon }}
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-links-group">
+        <h4 class="footer-heading">Quick Links</h4>
+        <ul class="footer-links">
+          <li>
+            <a routerLink="/">Home</a>
+          </li>
+          <li>
+            <a routerLink="/how-it-works">How it Works</a>
+          </li>
+          <li>
+            <a routerLink="/weather-widget">Weather Monitoring</a>
+          </li>
+          <li>
+            <a routerLink="/contact-us">Contact Us</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div class="footer-links-group">
+        <h4 class="footer-heading">Resources</h4>
+        <ul class="footer-links">
+          <li>
+            <a routerLink="/docs">Documentation</a>
+          </li>
+          <li>
+            <a href="https://github.com/your-repo" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </li>
+          <li>
+            <a routerLink="/contact-us">Contact</a>
+          </li>
+          <li>
+            <a routerLink="/faq">FAQ</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="footer-links-group">
+        <h4 class="footer-heading">Contact</h4>
+        <ul class="footer-contact">
+          <li>
+            <span class="contact-icon">📍</span>
+            <span>Tunis, Tunisia</span>
+          </li>
+          <li>
+            <span class="contact-icon">📧</span>
+            <a href="mailto:contact@oliveguard.com">contact@oliveguard.com</a>
+          </li>
+          <li>
+            <span class="contact-icon">🎓</span>
+            <span>Academic Project</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="footer-bottom">
+      <div class="footer-copyright">
+        <p>© {{ currentYear }} OliveGuard. Academic project for educational purposes.</p>
+      </div>
+      <div class="footer-legal">
+        <a routerLink="/privacy">Privacy Policy</a>
+        <span class="separator">•</span>
+        <a routerLink="/terms">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>

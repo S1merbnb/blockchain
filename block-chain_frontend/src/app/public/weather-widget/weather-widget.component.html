@@ -1,1 +1,34 @@
-<p>weather-widget works!</p>
+<div class="weather-card card">
+	<div class="weather-header">
+		<div class="title">Live Weather</div>
+		<div class="controls">
+			<select aria-label="Select city" class="location-select">
+				<option>Tunis</option>
+				<option>Sousse</option>
+				<option>Sfax</option>
+				<option>Gabès</option>
+				<option>Tozeur</option>
+			</select>
+			<div class="api-source">Source: <strong>OpenWeatherMap</strong></div>
+		</div>
+	</div>
+
+	<div class="weather-body">
+		<div class="current">
+			<div class="temp">22°C</div>
+			<div class="meta">
+				<div>Rain: 3 mm</div>
+				<div>Wind: 12 km/h</div>
+				<div>Humidity: 68%</div>
+			</div>
+		</div>
+
+		<div class="chart">
+			<!-- Small sparkline / mini chart placeholder -->
+			<svg viewBox="0 0 120 40" preserveAspectRatio="none" class="spark">
+				<polyline fill="none" stroke="#5A7D3A" stroke-width="2" points="0,30 20,22 40,24 60,14 80,18 100,12 120,16"/>
+			</svg>
+			<div class="last-update">Last update: a few seconds ago</div>
+		</div>
+	</div>
+</div>

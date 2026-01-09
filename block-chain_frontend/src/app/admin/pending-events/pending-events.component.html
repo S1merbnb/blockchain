@@ -1,0 +1,180 @@
+<div class="pending-events container">
+	<header class="page-header" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+		<div>
+			<h2>Pending Events</h2>
+			<p class="subtitle">Review detected events — sorted by confidence by default. Filter by date, region or search.</p>
+		</div>
+
+		<div style="display:flex;gap:0.6rem;align-items:center;">
+			<input type="search" placeholder="Search by ID, farm or region" [(ngModel)]="searchTerm" style="padding:0.5rem 0.75rem;border-radius:8px;border:1px solid rgba(15,23,42,0.06);width:320px;" />
+			<button class="btn btn-ghost" (click)="filterRegion='All'; filterStartDate=null; filterEndDate=null; searchTerm=''">Clear</button>
+			<button class="btn btn-primary" (click)="0">Export</button>
+		</div>
+	</header>
+
+	<section class="card" style="display:flex;gap:1rem;align-items:center;margin:0.75rem 0;">
+		<div style="flex:1;display:flex;gap:1rem;align-items:center;">
+			<div style="min-width:140px">
+				<div class="muted">Showing</div>
+				<div style="font-weight:700;font-size:1.25rem">{{ filteredEvents.length }}</div>
+				<div class="muted">events</div>
+			</div>
+			<div style="min-width:140px">
+				<div class="muted">High risk</div>
+				<div style="font-weight:700;font-size:1.25rem;color:var(--danger)">{{ highRiskCount() }}</div>
+			</div>
+			<div style="min-width:140px">
+				<div class="muted">Avg confidence</div>
+				<div style="font-weight:700;font-size:1.25rem">{{ getAvgConfidence() }}%</div>
+			</div>
+		</div>
+
+		<div style="display:flex;gap:0.6rem;align-items:center">
+			<div class="filter-group">
+				<label>Region</label>
+				<select [(ngModel)]="filterRegion">
+					<option value="All">All</option>
+					<option *ngFor="let r of regions" [value]="r">{{ r }}</option>
+				</select>
+			</div>
+
+			<div class="filter-group">
+				<label>Start</label>
+				<input type="date" [(ngModel)]="filterStartDate" />
+			</div>
+
+			<div class="filter-group">
+				<label>End</label>
+				<input type="date" [(ngModel)]="filterEndDate" />
+			</div>
+		</div>
+	</section>
+
+	<section class="table-wrap">
+			<table class="events-table">
+				<thead>
+					<tr>
+						<th class="col-event">Event</th>
+						<th class="col-farm">Farm / Location</th>
+						<th class="col-date sortable" (click)="toggleSort('dateDetected')">Date <span class="sort-indicator" *ngIf="sortField==='dateDetected'">{{ sortDir === 'asc' ? '▲' : '▼' }}</span></th>
+						<th class="col-confidence sortable" (click)="toggleSort('confidence')">Confidence <span class="sort-indicator" *ngIf="sortField==='confidence'">{{ sortDir === 'asc' ? '▲' : '▼' }}</span></th>
+						<th class="col-risk">Risk</th>
+						<th class="col-action">Action</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr class="events-row" *ngFor="let e of filteredEvents">
+						<td class="col-event">
+							<div class="id">{{ e.id }}</div>
+							<div class="muted small">{{ e.dateDetected | date: 'medium' }}</div>
+						</td>
+
+						<td class="col-farm">
+							<div class="farm-name">{{ e.farm }}</div>
+							<div class="muted small">{{ e.region }}</div>
+						</td>
+
+						<td class="col-date">{{ e.dateDetected | date: 'short' }}</td>
+
+						<td class="col-confidence">
+							<div class="confidence-cell">
+								<div class="bar"><div class="conf-fill" [style.width.%]="e.confidence" [style.background]="riskLabel(e.confidence).color"></div></div>
+								<div class="conf-text">{{ e.confidence }}%</div>
+							</div>
+						</td>
+
+						<td class="col-risk"><span class="badge" [style.background]="riskLabel(e.confidence).color">{{ riskLabel(e.confidence).label }}</span></td>
+
+						<td class="col-action">
+							<button class="btn btn-ghost" title="View event" (click)="viewEvent(e)">
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+									<path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+									<path d="M2.5 12s3.5-7 9.5-7 9.5 7 9.5 7-3.5 7-9.5 7S2.5 12 2.5 12z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+								</svg>
+							</button>
+						</td>
+					</tr>
+
+					<tr *ngIf="filteredEvents.length === 0">
+						<td colspan="6" class="muted empty">No events match the selected filters.</td>
+					</tr>
+				</tbody>
+			</table>
+	</section>
+		<!-- Event Detail Modal -->
+			<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+				<div class="modal-card" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+					<button class="modal-close" aria-label="Close" (click)="closeModal()">✕</button>
+					<div class="modal-header">
+						<div class="modal-title">
+							<div class="id">{{ selectedEvent?.id }}</div>
+							<div class="muted small">{{ selectedEvent?.dateDetected | date:'fullDate' }} • {{ selectedEvent?.dateDetected | date:'shortTime' }}</div>
+						</div>
+						<div class="modal-status">
+							<span class="muted">Status</span>
+							<div class="status-pill">{{ selectedEvent?.status }}</div>
+						</div>
+					</div>
+
+					<div class="modal-body modal-grid">
+						<section class="left-panel">
+							<h4>Weather evidence</h4>
+							<p class="muted">Recent weather measurements and detected anomalies near the event.</p>
+
+							<div class="chart-block">
+								<div class="chart-title">Rainfall (mm)</div>
+								<svg [attr.width]="300" [attr.height]="80" viewBox="0 0 300 80" preserveAspectRatio="none">
+									<polyline [attr.points]="sparkline(modalRain,300,60)" stroke="rgba(30,58,138,0.95)" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"></polyline>
+									<polyline [attr.points]="sparkline(modalRain,300,60)" stroke="rgba(30,58,138,0.06)" stroke-width="10" fill="none" stroke-linejoin="round" stroke-linecap="round"></polyline>
+								</svg>
+							</div>
+
+							<div class="chart-block">
+								<div class="chart-title">Temperature (°C)</div>
+								<svg [attr.width]="300" [attr.height]="80" viewBox="0 0 300 80" preserveAspectRatio="none">
+									<polyline [attr.points]="sparkline(modalTemp,300,60)" stroke="rgba(6,182,212,0.95)" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"></polyline>
+								</svg>
+							</div>
+
+							<div class="anomalies" *ngIf="modalAnomalies.length">
+								<h5>Anomalies</h5>
+								<ul>
+									<li *ngFor="let a of modalAnomalies">⚠️ {{ a }}</li>
+								</ul>
+							</div>
+						</section>
+
+						<aside class="right-panel">
+							<h4>Decision panel</h4>
+
+							<div class="confidence-block">
+								<div class="muted">Confidence</div>
+								<div class="confidence-value">{{ selectedEvent?.confidence }}%</div>
+							</div>
+
+							<div class="tx-block">
+								<div class="muted">Blockchain transaction</div>
+								<div class="tx-value">{{ selectedEvent?.blockchainTx ? selectedEvent?.blockchainTx : 'Pending' }}</div>
+							</div>
+
+							<div class="actions">
+								<button class="btn btn-confirm" [disabled]="processingAction || selectedEvent?.status !== 'Pending'" (click)="confirmRefund()">
+									<span *ngIf="processingAction" class="spinner" aria-hidden="true"></span>
+									✅ Confirm Refund
+								</button>
+								<button class="btn btn-cancel" [disabled]="processingAction || selectedEvent?.status !== 'Pending'" (click)="cancelRefund()">
+									<span *ngIf="processingAction" class="spinner" aria-hidden="true"></span>
+									❌ Cancel Refund
+								</button>
+							</div>
+
+							<div class="tx-record" *ngIf="selectedEvent?.blockchainTx">
+								<div class="muted">Recorded</div>
+								<div class="tx-value monospace">{{ selectedEvent?.blockchainTx }}</div>
+							</div>
+						</aside>
+					</div>
+				</div>
+			</div>
+		</div>

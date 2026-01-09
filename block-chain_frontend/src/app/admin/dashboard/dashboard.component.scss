@@ -1,0 +1,38 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root { --primary: #5A7D3A; --secondary: #1E3A5F; --card-shadow: 0 8px 24px rgba(31,41,55,0.06); }
+
+.dashboard { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto; padding: 20px; }
+.dashboard-header h1 { margin:0; font-family: 'Poppins', sans-serif; color: var(--secondary); }
+.dashboard-header .subtitle { color:#64748b; margin-bottom:12px; }
+
+.kpi-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin:18px 0 22px; }
+.kpi { padding:16px; border-radius:12px; box-shadow: var(--card-shadow); background: #fff; }
+.kpi-title { font-size:13px; color:#64748b; }
+.kpi-value { font-size:22px; font-weight:700; margin-top:6px; color:#0f172a; }
+.kpi-value.success { color: #15803d; }
+.kpi-value.warning { color: #b45309; }
+.kpi-value.muted { color:#6b7280; }
+
+.analytics { display:grid; grid-template-columns: 1fr 320px; gap:20px; align-items:start; }
+.chart-card { padding:16px; border-radius:12px; box-shadow: var(--card-shadow); background: white; }
+.chart-header { display:flex; justify-content:space-between; align-items:center; }
+.chart-body { display:flex; gap:16px; align-items:center; padding-top:12px; }
+.spark { width:220px; height:60px; }
+.chart-meta { color:#64748b; font-size:13px; display:flex; flex-direction:column; gap:6px; }
+
+.status-card { padding:16px; border-radius:12px; box-shadow: var(--card-shadow); background:white; }
+.status-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px dashed #eef2f6; }
+.status-row:last-child { border-bottom:none; }
+.status-label { color:#64748b; }
+.status-value { font-weight:700; color:#0f172a; display:flex; align-items:center; gap:8px; }
+.dot { width:12px; height:12px; border-radius:50%; background:#ef4444; display:inline-block; }
+.dot.online { background: var(--primary); }
+
+.note { margin-top:12px; color:#94a3b8; font-size:13px; }
+
+@media (max-width: 980px) {
+	.kpi-grid { grid-template-columns: repeat(2,1fr); }
+	.analytics { grid-template-columns: 1fr; }
+}

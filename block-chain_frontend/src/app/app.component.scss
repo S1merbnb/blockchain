@@ -1,0 +1,8 @@
+/* when sidebar is present, shift main to the right */
+main.with-sidebar {
+	margin-left: 260px; /* match --sidebar-width */
+}
+
+/* ensure router-outlet content stretches */
+router-outlet, .content { display: block; }
+

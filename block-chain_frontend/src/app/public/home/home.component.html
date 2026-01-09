@@ -1,1 +1,143 @@
-<p>home works!</p>
+<div class="landing-page">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-background">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+    </div>
+
+    <div class="container hero-content">
+      <!-- Badge -->
+      <div class="hero-badge">
+        <span class="badge-icon">⚡</span>
+        <span class="badge-text">AI-Powered Agricultural Insurance</span>
+      </div>
+
+      <!-- Main Heading -->
+      <h1 class="hero-title">
+        Smart Insurance for
+        <span class="hero-title-gradient">Olive Farms</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Automated weather-based damage detection powered by blockchain transparency and expert validation
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="hero-actions">
+        <button class="btn btn-primary" routerLink="/how-it-works">
+          Get Started
+          <span class="btn-arrow">→</span>
+        </button>
+        <button class="btn btn-secondary" routerLink="/login">
+          Watch Demo
+        </button>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div *ngFor="let stat of stats" class="stat-card">
+          <div class="stat-value">{{ stat.value }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section container">
+    <div class="section-header">
+      <h2 class="section-title">Powerful Features</h2>
+      <p class="section-subtitle">
+        Cutting-edge technology designed specifically for agricultural insurance
+      </p>
+    </div>
+
+    <div class="features-grid">
+      <article *ngFor="let feature of features" class="feature-card">
+        <div class="feature-icon-wrapper" [ngClass]="'bg-gradient-' + feature.gradient">
+          <span class="feature-icon">{{ feature.icon }}</span>
+        </div>
+        <h3 class="feature-title">{{ feature.title }}</h3>
+        <p class="feature-description">{{ feature.description }}</p>
+        <a class="feature-link">
+          Learn more →
+        </a>
+      </article>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="how-it-works-section container">
+    <div class="section-header">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-subtitle">
+        A seamless four-step process from detection to claim approval
+      </p>
+    </div>
+
+    <div class="steps-container">
+      <div *ngFor="let step of steps; let i = index" class="step-card">
+        <div class="step-number">{{ step.number }}</div>
+        <div class="step-content">
+          <div class="step-icon">{{ step.icon }}</div>
+          <h4 class="step-title">{{ step.title }}</h4>
+          <p class="step-description">{{ step.description }}</p>
+        </div>
+        <div *ngIf="i < steps.length - 1" class="step-connector"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Weather Widget -->
+  <section class="weather-section container">
+    <div class="section-header">
+      <h2 class="section-title">Live Weather Monitoring</h2>
+      <p class="section-subtitle">Real-time data from your farm's location</p>
+    </div>
+    <div class="weather-widget-wrapper">
+      <app-weather-widget></app-weather-widget>
+    </div>
+  </section>
+
+  <!-- Trust Section -->
+  <section class="trust-section container">
+    <div class="trust-card">
+      <div class="trust-icon">
+        <span class="chain-icon">⛓️</span>
+      </div>
+      <div class="trust-content">
+        <h3 class="trust-title">Built on Trust & Transparency</h3>
+        <p class="trust-description">
+          Every detected event is recorded on-chain with cryptographic proof. Complete audit trails, 
+          immutable records, and full provenance—no silent edits, no hidden changes.
+        </p>
+        <div class="trust-features">
+          <div class="trust-feature">
+            <span class="check-icon">✓</span>
+            <span>Immutable Records</span>
+          </div>
+          <div class="trust-feature">
+            <span class="check-icon">✓</span>
+            <span>Full Audit Trail</span>
+          </div>
+          <div class="trust-feature">
+            <span class="check-icon">✓</span>
+            <span>Cryptographic Proof</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section container">
+    <div class="cta-card">
+      <h2 class="cta-title">Ready to Protect Your Olive Farm?</h2>
+      <p class="cta-subtitle">Join thousands of farmers already using smart insurance</p>
+      <button class="btn btn-primary btn-large" routerLink="/signup">
+        Get Started Today
+      </button>
+    </div>
+  </section>
+</div>

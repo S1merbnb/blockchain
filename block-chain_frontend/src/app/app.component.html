@@ -1,1 +1,9 @@
-<router-outlet></router-outlet>
+<app-navbar *ngIf="!isAuthenticated"></app-navbar>
+
+<app-sidebar *ngIf="isAuthenticated"></app-sidebar>
+
+<main [class.with-sidebar]="isAuthenticated">
+	<router-outlet></router-outlet>
+</main>
+
+<app-footer *ngIf="!isAuthenticated"></app-footer>

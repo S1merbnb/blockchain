@@ -1,0 +1,36 @@
+<div class="blockchain-log container">
+	<header class="page-header">
+		<h2>Blockchain Log</h2>
+		<p class="subtitle">Audit trail of events and their blockchain transactions — read-only for transparency.</p>
+	</header>
+
+	<section class="card table-card">
+		<div class="table-wrap">
+			<table class="log-table">
+				<thead>
+					<tr>
+						<th>Event ID</th>
+						<th>Action</th>
+						<th>Timestamp</th>
+						<th>Transaction</th>
+						<th>Explorer</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let e of entries">
+						<td class="mono">{{ e.eventId }}</td>
+						<td>
+							<span class="badge" [ngStyle]="{ 'background': e.action === 'Confirmed' ? 'var(--primary)' : (e.action === 'Cancelled' ? 'var(--danger)' : 'var(--muted)') }">{{ e.action }}</span>
+						</td>
+						<td>{{ e.timestamp | date: 'medium' }}</td>
+						<td class="mono">{{ e.txHash ? e.txHash : '—' }}</td>
+						<td>
+							<a *ngIf="e.txHash" [href]="explorerUrl(e.txHash)" target="_blank" rel="noopener" class="link">View</a>
+							<span *ngIf="!e.txHash" class="muted">—</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</section>
+</div>

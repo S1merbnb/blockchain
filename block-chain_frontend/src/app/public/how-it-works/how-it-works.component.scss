@@ -1,0 +1,18 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600;700&display=swap');
+
+:root { --primary: #5A7D3A; --secondary: #1E3A5F; --card-shadow: 0 6px 18px rgba(31, 41, 55, 0.06); --radius: 12px; }
+
+.how-page { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto; color: #0f172a; }
+.how-page h1 { color: var(--secondary); margin-bottom: 6px; font-family: 'Poppins', sans-serif; }
+.how-page .lead { color: #475569; margin-bottom: 18px; }
+
+.steps { display:grid; gap:14px; }
+.step { display:flex; gap:16px; align-items:flex-start; padding:16px; border-radius: var(--radius); box-shadow: var(--card-shadow); background: white; }
+.step-index { width:52px; height:52px; border-radius:10px; background: var(--primary); color: white; display:flex; align-items:center; justify-content:center; font-weight:700; }
+.step-body h3 { margin:0 0 6px 0; color: var(--secondary); }
+.step-body p { margin:0; color:#475569; }
+
+@media (max-width: 720px) {
+	.step { flex-direction: row; }
+}

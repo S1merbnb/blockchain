@@ -1,0 +1,49 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600;700&display=swap');
+
+:root { --primary: #5A7D3A; --secondary: #1E3A5F; --card-shadow: 0 12px 40px rgba(31,41,55,0.08); --radius: 16px; }
+
+.contact-page { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto; background: linear-gradient(180deg, #fbfcfd, #ffffff); min-height: calc(100vh - 72px); padding:48px 16px; }
+
+.contact-hero.container { max-width:1200px; margin:0 auto; display:grid; grid-template-columns: 1fr 1.05fr; gap:32px; align-items:stretch; }
+
+.hero-left { display:flex; align-items:center; }
+.hero-card { background: linear-gradient(180deg, rgba(90,125,58,0.06), rgba(30,58,95,0.02)); padding:36px; border-radius: var(--radius); min-height:380px; display:flex; flex-direction:column; gap:18px; justify-content:center; }
+.hero-card .logo { height:54px; display:block; margin-bottom:6px; }
+.hero-card h1 { margin:0; font-family: 'Poppins', sans-serif; color: var(--secondary); font-size:26px; }
+.hero-card .subtitle { color:#475569; max-width:420px; }
+.benefits { list-style:none; padding:0; margin:10px 0 0 0; display:flex; flex-direction:column; gap:8px; color:#334155; font-weight:600; }
+
+.contact-info { margin-top:16px; display:flex; flex-direction:column; gap:10px; }
+.info-row { display:flex; gap:12px; align-items:center; }
+.info-row .icon { color:var(--secondary); }
+.small { font-size:13px; color:#475569; }
+.muted { color:#64748b; font-size:14px; }
+
+.hero-right { display:flex; align-items:flex-start; }
+.form-card { background: white; padding:28px; border-radius: var(--radius); box-shadow: var(--card-shadow); width:100%; }
+.form-card h2 { margin:0 0 2px 0; font-family: 'Poppins', sans-serif; color:var(--secondary); }
+.form-card .muted { margin-bottom:12px; }
+
+.contact-form { display:flex; flex-direction:column; gap:14px; }
+.grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+.field { display:flex; flex-direction:column; gap:8px; }
+.label-text { font-size:13px; color:#475569; font-weight:600; }
+input[type="text"], input[type="email"], textarea { padding:12px 14px; border-radius:12px; border:1px solid #e6eef6; background:#fbfcfd; font-size:14px; transition:box-shadow .14s ease, transform .12s ease; }
+input:focus, textarea:focus { outline:none; box-shadow:0 6px 18px rgba(90,125,58,0.08); transform: translateY(-1px); border-color: rgba(90,125,58,0.12); }
+textarea { min-height:120px; resize:vertical; }
+
+.row.actions { display:flex; gap:12px; align-items:center; }
+.btn { padding:10px 16px; border-radius:12px; font-weight:700; cursor:pointer; border: none; }
+.btn-primary { background: linear-gradient(135deg, var(--primary), #4f8b35); color:#fff; box-shadow: 0 10px 30px rgba(90,125,58,0.12); }
+.btn-ghost { background: transparent; border:1px solid #e6eef6; color:var(--secondary); }
+
+.form-note { margin-top:10px; font-size:13px; color:#94a3b8; }
+
+@media (max-width: 980px) {
+  .contact-hero.container { grid-template-columns: 1fr; }
+  .hero-left { order:2; }
+  .hero-right { order:1; }
+  .grid { grid-template-columns: 1fr; }
+}
+

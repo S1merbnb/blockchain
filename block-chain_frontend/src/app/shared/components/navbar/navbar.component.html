@@ -1,0 +1,114 @@
+<nav class="navbar" [class.scrolled]="isScrolled" role="navigation" aria-label="Main Navigation">
+  <div class="navbar-content container">
+    <!-- Left: Logo -->
+    <div class="nav-left">
+      <a class="brand" href="/" routerLink="/" title="Olive Insurance - Home" (click)="closeMobileMenu()">
+        <img src="/assets/images/logo.png" alt="Olive Insurance logo" />
+      </a>
+    </div>
+
+    <!-- Center: Desktop Navigation -->
+    <div class="nav-center">
+      <ul class="nav-links">
+        <li>
+          <a 
+            routerLink="/" 
+            routerLinkActive="active" 
+            [routerLinkActiveOptions]="{ exact: true }" 
+            title="Home">
+            Home
+          </a>
+        </li>
+        <li>
+          <a 
+            routerLink="/how-it-works" 
+            routerLinkActive="active" 
+            title="How it Works">
+            How it Works
+          </a>
+        </li>
+        <li>
+          <a 
+            routerLink="/weather-widget" 
+            routerLinkActive="active" 
+            title="Weather Monitoring">
+            Weather
+          </a>
+        </li>
+        <li>
+          <a 
+            routerLink="/contact-us" 
+            routerLinkActive="active" 
+            title="Contact Us">
+            Contact Us
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Right: CTA Button -->
+    <div class="nav-right">
+      <a class="btn-login" routerLink="/login" title="Login to Dashboard">
+        <span class="login-text">Connexion</span>
+      </a>
+      
+      <!-- Mobile Menu Toggle -->
+      <button 
+        class="mobile-toggle" 
+        (click)="toggleMobileMenu()"
+        [class.active]="isMobileMenuOpen"
+        aria-label="Toggle mobile menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [class.open]="isMobileMenuOpen">
+    <ul class="mobile-nav-links">
+      <li>
+        <a 
+          routerLink="/" 
+          routerLinkActive="active" 
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMobileMenu()">
+          🏠 Home
+        </a>
+      </li>
+      <li>
+        <a 
+          routerLink="/how-it-works" 
+          routerLinkActive="active"
+          (click)="closeMobileMenu()">
+          ⚙️ How it Works
+        </a>
+      </li>
+      <li>
+        <a 
+          routerLink="/weather-widget" 
+          routerLinkActive="active"
+          (click)="closeMobileMenu()">
+          🌦️ Weather
+        </a>
+      </li>
+      <li>
+        <a 
+          routerLink="/about" 
+          routerLinkActive="active"
+          (click)="closeMobileMenu()">
+          ℹ️ About
+        </a>
+      </li>
+      <li class="mobile-login">
+        <a 
+          routerLink="/login" 
+          class="mobile-login-btn"
+          (click)="closeMobileMenu()">
+          👤 Login
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

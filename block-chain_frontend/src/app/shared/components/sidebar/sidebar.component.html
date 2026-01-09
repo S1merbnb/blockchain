@@ -1,0 +1,19 @@
+<aside class="sidebar">
+	<div class="brand">
+		<img src="/assets/images/logo.png" alt="Olive Insurance" />
+	</div>
+
+	<nav class="nav">
+		<a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+		<a routerLink="/dashboard/pending-events" routerLinkActive="active">Pending Events</a>
+		<a routerLink="/dashboard/blockchain-log" routerLinkActive="active">Blockchain Log</a>
+		<a routerLink="/dashboard/reports" routerLinkActive="active">Reports</a>
+		<a routerLink="/dashboard/create-farm" routerLinkActive="active">Create Farm</a>
+
+	</nav>
+
+	<div class="sidebar-footer">
+		<div class="user">{{ userEmail || 'Insurer' }}</div>
+		<button class="btn-logout" (click)="logout()">Logout</button>
+	</div>
+</aside>

@@ -1,0 +1,40 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600;700&display=swap');
+
+:root { --primary: #5A7D3A; --secondary: #1E3A5F; --bg: #ffffff; --card-shadow: 0 8px 30px rgba(31,41,55,0.06); --radius: 14px; }
+
+.login-page { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto; background: linear-gradient(180deg, #fbfcfd, #ffffff); min-height: calc(100vh - 72px); display:flex; align-items:center; justify-content:center; padding:36px 16px; }
+
+.login-container { display:flex; gap:28px; max-width:980px; width:100%; align-items:stretch; }
+
+.login-visual { flex:1 1 45%; display:flex; align-items:center; justify-content:center; border-radius: var(--radius); background: linear-gradient(180deg, rgba(90,125,58,0.06), rgba(30,58,95,0.02)); padding:28px; }
+.visual-inner { text-align:center; }
+.visual-logo { height:72px; margin-bottom:12px; }
+.visual-tag { color:#334155; font-weight:600; }
+
+.login-card { flex:1 1 55%; padding:28px; border-radius: var(--radius); background: white; box-shadow: var(--card-shadow); }
+.brand img { height:44px; display:block; margin-bottom:8px; }
+.login-card h2 { font-family: 'Poppins', sans-serif; color: var(--secondary); margin:6px 0 4px; }
+.login-card .lead { color:#475569; margin-bottom:18px; }
+
+.login-form { display:flex; flex-direction:column; gap:12px; }
+.field { display:flex; flex-direction:column; gap:6px; }
+.label-text { font-size:13px; color:#475569; font-weight:600; }
+input[type="email"], input[type="password"] { padding:10px 12px; border-radius:10px; border:1px solid #e6eef6; background:#fbfcfd; font-size:14px; }
+
+.form-row { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#64748b; }
+.checkbox input { margin-right:8px; }
+.forgot { color: var(--secondary); text-decoration:none; }
+
+.actions { margin-top:6px; }
+.btn { display:inline-block; padding:10px 16px; border-radius:10px; font-weight:700; text-decoration:none; }
+.btn-primary { background: var(--primary); color: #fff; border: none; box-shadow: 0 8px 24px rgba(90,125,58,0.12); }
+
+.hint { margin-top:14px; color:#94a3b8; font-size:13px; }
+
+@media (max-width: 920px) {
+	.login-container { flex-direction:column; }
+	.login-visual { order:2; }
+	.login-card { order:1; }
+}

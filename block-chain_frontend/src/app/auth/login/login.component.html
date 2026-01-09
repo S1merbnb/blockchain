@@ -1,0 +1,41 @@
+<div class="login-page">
+	<div class="login-container">
+		<aside class="login-visual">
+			<!-- optional visual / illustration space. Add an image at /assets/images/olive-field.jpg if desired -->
+			<div class="visual-inner">
+				<img src="/assets/images/logo.png" alt="Olive Insurance" class="visual-logo" />
+				<p class="visual-tag">Smart Insurance for Olive Farms</p>
+			</div>
+		</aside>
+
+		<main class="login-card card">
+
+			<h2>Insurance Login</h2>
+			<p class="lead">Access the insurer dashboard to review events and confirm claims.</p>
+
+		<form class="login-form" action="#" method="post" novalidate (submit)="onSubmit($event)">
+				<label class="field">
+					<span class="label-text">Email</span>
+					<input type="email" name="email" required placeholder="you@company.com" aria-label="Email address" />
+				</label>
+
+				<label class="field">
+					<span class="label-text">Password</span>
+					<input type="password" name="password" required placeholder="••••••••" aria-label="Password" />
+				</label>
+
+				<div class="form-row">
+					<label class="checkbox">
+						<input type="checkbox" name="remember" /> Remember me
+					</label>
+					<a class="forgot" href="#">Forgot?</a>
+				</div>
+
+				<div class="actions">
+					<button class="btn btn-primary" type="submit">Connection</button>
+				</div>
+			</form>
+
+		</main>
+	</div>
+</div>

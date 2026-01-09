@@ -1,0 +1,67 @@
+<div class="dashboard container">
+	<!-- Show the overview only when the current route is exactly /dashboard -->
+	<ng-container *ngIf="showOverview">
+		<header class="dashboard-header">
+			<h1>Admin Overview</h1>
+			<p class="subtitle">Instant system status & live activity (read-only)</p>
+		</header>
+
+		<section class="kpi-grid">
+			<article class="kpi card">
+				<div class="kpi-title">Total monitored farms</div>
+				<div class="kpi-value">{{ totalFarms | number }}</div>
+			</article>
+
+			<article class="kpi card">
+				<div class="kpi-title">Pending events</div>
+				<div class="kpi-value warning">{{ pendingEvents }}</div>
+			</article>
+
+			<article class="kpi card">
+				<div class="kpi-title">Confirmed refunds</div>
+				<div class="kpi-value success">{{ confirmedRefunds }}</div>
+			</article>
+
+			<article class="kpi card">
+				<div class="kpi-title">Cancelled events</div>
+				<div class="kpi-value muted">{{ cancelledEvents }}</div>
+			</article>
+		</section>
+
+		<section class="analytics">
+			<div class="chart-card card">
+				<div class="chart-header">
+					<h3>Events per week</h3>
+					<div class="small muted">Last 8 weeks</div>
+				</div>
+				<div class="chart-body">
+					<svg class="spark" viewBox="0 0 140 40" preserveAspectRatio="none">
+						<polyline [attr.points]="sparkPoints" fill="none" stroke="#5A7D3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+					</svg>
+					<div class="chart-meta">
+						<div>Max: {{ maxValue }}</div>
+						<div>Avg: {{ avgValue }}</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="status-card card">
+				<h3>Status summary</h3>
+				<div class="status-row">
+					<div class="status-label">System</div>
+					<div class="status-value"><span class="dot" [class.online]="systemOnline"></span> {{ systemOnline ? 'Online' : 'Offline' }}</div>
+				</div>
+
+				<div class="status-row">
+					<div class="status-label">Last weather update</div>
+					<div class="status-value">{{ lastWeatherUpdate | date: 'short' }}</div>
+				</div>
+
+				<div class="note muted">This page is read-only. No actions are performed here.</div>
+			</aside>
+		</section>
+	</ng-container>
+
+	<!-- Child routes (pending-events, blockchain-log, reports, etc.) will render here -->
+	<router-outlet></router-outlet>
+</div>
