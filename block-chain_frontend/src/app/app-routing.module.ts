@@ -10,6 +10,7 @@ import { BlockchainLogComponent } from './admin/blockchain-log/blockchain-log.co
 import { PendingEventsComponent } from './admin/pending-events/pending-events.component';
 import { ReportsComponent } from './admin/reports/reports.component';
 import { CreateFarmComponent } from './admin/create-farm/create-farm.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -21,7 +22,8 @@ const routes: Routes = [
     { path: 'pending-events', component: PendingEventsComponent },
     { path: 'blockchain-log', component: BlockchainLogComponent },
     { path: 'reports', component: ReportsComponent },
-    { path: 'create-farm', component: CreateFarmComponent }
+    { path: 'create-farm', component: CreateFarmComponent },
+    { path: 'register', component: RegisterComponent }
   ] }
 ];
 

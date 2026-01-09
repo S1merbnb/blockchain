@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,6 +18,7 @@ import { PendingEventsComponent } from './admin/pending-events/pending-events.co
 import { BlockchainLogComponent } from './admin/blockchain-log/blockchain-log.component';
 import { ReportsComponent } from './admin/reports/reports.component';
 import { CreateFarmComponent } from './admin/create-farm/create-farm.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 @NgModule({
   declarations: [
@@ -33,11 +35,13 @@ import { CreateFarmComponent } from './admin/create-farm/create-farm.component';
     PendingEventsComponent,
     BlockchainLogComponent,
     ReportsComponent,
-    CreateFarmComponent
+    CreateFarmComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+  HttpClientModule,
     AppRoutingModule
   ],
   providers: [],

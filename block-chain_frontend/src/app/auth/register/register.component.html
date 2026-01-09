@@ -1,0 +1,41 @@
+<div class="login-page">
+	<div class="login-container">
+		<aside class="login-visual">
+			<div class="visual-inner">
+				<img src="/assets/images/logo.png" alt="Logo" class="visual-logo" />
+				<p class="visual-tag">Smart Insurance for Olive Farms</p>
+			</div>
+		</aside>
+
+		<main class="login-card card register-card">
+
+			<h2>Create an account</h2>
+			<p class="lead">Register to access the insurer dashboard and manage events.</p>
+
+			<div *ngIf="message" class="hint" [class.error]="!success">{{ message }}</div>
+
+			<form class="login-form" (submit)="onSubmit($event)" novalidate>
+				<label class="field">
+					<span class="label-text">Email</span>
+					<input type="email" name="email" required placeholder="you@company.com" aria-label="Email address" />
+				</label>
+
+				<label class="field">
+					<span class="label-text">Password</span>
+					<input type="password" name="password" required placeholder="••••••••" aria-label="Password" />
+				</label>
+
+				<label class="field">
+					<span class="label-text">Role (optional)</span>
+					<input type="text" name="role" placeholder="USER" />
+				</label>
+
+				<div class="actions">
+					<button class="btn btn-primary" type="submit">Register</button>
+				</div>
+			</form>
+
+
+		</main>
+	</div>
+</div>
