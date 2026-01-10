@@ -1,41 +1,88 @@
-<div class="login-page">
-	<div class="login-container">
-		<aside class="login-visual">
-			<div class="visual-inner">
-				<img src="/assets/images/logo.png" alt="Logo" class="visual-logo" />
-				<p class="visual-tag">Smart Insurance for Olive Farms</p>
-			</div>
-		</aside>
+<!-- show a single Register button that opens a small modal, and a users table beneath -->
 
-		<main class="login-card card register-card">
-
-			<h2>Create an account</h2>
-			<p class="lead">Register to access the insurer dashboard and manage events.</p>
-
-			<div *ngIf="message" class="hint" [class.error]="!success">{{ message }}</div>
-
-			<form class="login-form" (submit)="onSubmit($event)" novalidate>
-				<label class="field">
-					<span class="label-text">Email</span>
-					<input type="email" name="email" required placeholder="you@company.com" aria-label="Email address" />
-				</label>
-
-				<label class="field">
-					<span class="label-text">Password</span>
-					<input type="password" name="password" required placeholder="••••••••" aria-label="Password" />
-				</label>
-
-				<label class="field">
-					<span class="label-text">Role (optional)</span>
-					<input type="text" name="role" placeholder="USER" />
-				</label>
-
-				<div class="actions">
-					<button class="btn btn-primary" type="submit">Register</button>
-				</div>
-			</form>
-
-
-		</main>
+<div class="register-standalone">
+	<div class="top-row">
+		<button class="btn btn-primary" (click)="open = true" *ngIf="!open">Register</button>
+		<div class="search-wrap">
+			<input type="search" [(ngModel)]="searchTerm" placeholder="Search by email" aria-label="Search users by email" />
+			<button *ngIf="searchTerm" class="link-btn" (click)="searchTerm = ''" aria-label="Clear search">✕</button>
+		</div>
 	</div>
+
+	<!-- modal -->
+	<div *ngIf="open">
+		<div class="modal-backdrop" (click)="open = false"></div>
+		<div class="modal-wrapper">
+			<main class="login-card card register-card modal">
+				<button class="modal-close" aria-label="Close" (click)="open = false">×</button>
+
+				<aside class="login-visual">
+					<div class="visual-inner">
+						<img src="/assets/images/logo.png" alt="Logo" class="visual-logo" />
+						<p class="visual-tag">Smart Insurance for Olive Farms</p>
+					</div>
+				</aside>
+
+				<h2>Create an account</h2>
+				<p class="lead">Register to access the insurer dashboard and manage events.</p>
+
+				<div *ngIf="message" class="hint" [class.error]="!success">{{ message }}</div>
+
+				<form class="login-form" (submit)="onSubmit($event)" novalidate>
+					<label class="field">
+						<span class="label-text">Email</span>
+						<input type="email" name="email" required aria-label="Email address" autocomplete="email" />
+					</label>
+
+					<label class="field">
+						<span class="label-text">Password</span>
+						<input type="password" name="password" required placeholder="•••••••••••••" aria-label="Password" />
+					</label>
+
+								<label class="field">
+									<span class="label-text">Role</span>
+									<select name="role" required aria-label="Role">
+										<option value="ADMIN" selected>ADMIN</option>
+										<option value="SUPERADMIN">SUPERADMIN</option>
+										<option value="BLOCK">BLOCK</option>
+									</select>
+								</label>
+
+					<div class="actions">
+						<button class="btn btn-primary" type="submit">Register</button>
+					</div>
+				</form>
+			</main>
+		</div>
+	</div>
+
+	<!-- users table -->
+	<div class="users-table">
+		<h3>Users</h3>
+		<div *ngIf="loadingUsers">Loading users...</div>
+	<table *ngIf="!loadingUsers && filteredUsers.length > 0" aria-describedby="users-help">
+			<thead>
+				<tr>
+					<th>Email</th>
+					<th>Role</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let u of filteredUsers">
+					<td>{{ u.email }}</td>
+							<td colspan="2">
+								<div class="role-group" [attr.aria-busy]="u.saving">
+									<button class="role-btn" [class.active]="u.role === 'SUPERADMIN'" (click)="saveRole(u, 'SUPERADMIN')" [disabled]="u.saving">SUPERADMIN</button>
+									<button class="role-btn" [class.active]="u.role === 'ADMIN'" (click)="saveRole(u, 'ADMIN')" [disabled]="u.saving">ADMIN</button>
+									<button class="role-btn" [class.active]="u.role === 'BLOCK'" (click)="saveRole(u, 'BLOCK')" [disabled]="u.saving">BLOCK</button>
+								</div>
+								<div *ngIf="u.error" class="hint error" style="margin-top:6px; font-size:13px;">{{ u.error }}</div>
+							</td>
+				</tr>
+			</tbody>
+		</table>
+		<div *ngIf="!loadingUsers && (users?.length ?? 0) === 0" id="users-help">No users yet.</div>
+		<div *ngIf="!loadingUsers && (users?.length ?? 0) > 0 && filteredUsers.length === 0" id="users-help">No users match "{{ searchTerm }}".</div>
+	</div>
+
 </div>

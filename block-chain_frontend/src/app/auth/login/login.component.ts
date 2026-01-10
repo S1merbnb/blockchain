@@ -35,6 +35,8 @@ export class LoginComponent {
         try {
           sessionStorage.setItem('authToken', res.token);
           sessionStorage.setItem('authUser', res.email);
+          // store role if backend returned it (used for UI authorization)
+          if (res.role) sessionStorage.setItem('authRole', res.role);
           // expiry (1 hour)
           sessionStorage.setItem('authExpiry', (Date.now() + 60 * 60 * 1000).toString());
         } catch (e) {

@@ -8,10 +8,12 @@ import { Router } from '@angular/router';
 })
 export class SidebarComponent {
   userEmail: string | null = null;
+  userRole: string | null = null;
 
   constructor(private router: Router) {
     try {
       this.userEmail = sessionStorage.getItem('authUser');
+      this.userRole = sessionStorage.getItem('authRole');
     } catch (e) {
       this.userEmail = null;
     }
@@ -22,6 +24,7 @@ export class SidebarComponent {
       sessionStorage.removeItem('authToken');
       sessionStorage.removeItem('authUser');
       sessionStorage.removeItem('authExpiry');
+      sessionStorage.removeItem('authRole');
     } catch (e) {
       console.warn('Error clearing session', e);
     }

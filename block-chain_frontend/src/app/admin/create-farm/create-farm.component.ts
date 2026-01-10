@@ -1,24 +1,18 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, OnInit } from '@angular/core';
+import { FarmService } from '../../shared/services/farm.service';
+import { FrontFarm } from '../../shared/models/farm.model';
 
 declare const L: any; // Leaflet global (loaded dynamically)
 
-interface Farm {
-  id: number;
-  farmName: string;
-  farmerName: string;
-  phone: string;
-  area: number;
-  cropType: string;
-  notes?: string;
-  polygon?: number[][]; // array of [lat, lng]
-}
+// Reuse FrontFarm from shared models (alias locally)
+type Farm = FrontFarm;
 
 @Component({
   selector: 'app-create-farm',
   templateUrl: './create-farm.component.html',
   styleUrls: ['./create-farm.component.scss']
 })
-export class CreateFarmComponent implements AfterViewInit, OnDestroy {
+export class CreateFarmComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild('modalMap', { static: false }) modalMapRef!: ElementRef;
   @ViewChild('mainMap', { static: false }) mainMapRef!: ElementRef;
 
@@ -41,12 +35,17 @@ export class CreateFarmComponent implements AfterViewInit, OnDestroy {
   private drawnLayer: any = null;
   private farmLayers: Map<number, any> = new Map();
 
-  constructor(private hostRef: ElementRef) {}
+  constructor(private hostRef: ElementRef, private farmService: FarmService) {}
 
   ngAfterViewInit(): void {
     this.ensureLeaflet(() => {
       this.initMainMap();
     });
+  }
+
+  ngOnInit(): void {
+    // load farms from backend when component initializes
+    this.loadFarms();
   }
 
   ngOnDestroy(): void {
@@ -198,19 +197,57 @@ export class CreateFarmComponent implements AfterViewInit, OnDestroy {
     const polygon = this.drawingPoints.length ? this.drawingPoints.map(p => [p[0], p[1]]) : undefined;
 
     if (this.editingFarm) {
-      // update
-      const idx = this.farms.findIndex(f => f.id === this.editingFarm!.id);
-      if (idx >= 0) {
-        this.farms[idx] = { ...this.editingFarm!, farmName, farmerName, phone, area, cropType, notes, polygon };
-        this.updateFarmLayer(this.farms[idx]);
-      }
+      // persist update to backend
+      const updated: Farm = { ...this.editingFarm!, farmName, farmerName, phone, area, cropType, notes, polygon };
+      this.farmService.updateFarm(updated).subscribe({
+        next: (saved) => {
+          const idx = this.farms.findIndex(f => f.id === saved.id);
+          if (idx >= 0) {
+            this.farms[idx] = saved as Farm;
+            this.updateFarmLayer(this.farms[idx]);
+          }
+        },
+        error: (err) => {
+          console.error('Failed to update farm', err);
+          alert('Failed to update farm: ' + (err?.message || err?.statusText || 'Unknown'));
+        },
+        complete: () => this.closeModal()
+      });
     } else {
-      const farm: Farm = { id: this.nextId++, farmName, farmerName, phone, area, cropType, notes, polygon };
-      this.farms.push(farm);
-      this.addFarmLayer(farm);
+      // persist to backend
+      const newFarm: Farm = { farmName, farmerName, phone, area, cropType, notes, polygon };
+      this.farmService.addFarm(newFarm).subscribe({
+        next: (saved) => {
+          // backend returns id and createdAt; add to local list and layer
+          this.farms.push(saved as Farm);
+          this.addFarmLayer(saved as Farm);
+        },
+        error: (err) => {
+          console.error('Failed to save farm', err);
+          alert('Failed to save farm: ' + (err?.message || err?.statusText || 'Unknown'));
+        },
+        complete: () => this.closeModal()
+      });
     }
 
-    this.closeModal();
+    if (!this.editingFarm) {
+      // when creating, closeModal will be called in complete; otherwise close now
+    } else {
+      this.closeModal();
+    }
+  }
+
+  private loadFarms() {
+    this.farmService.getAll().subscribe({
+      next: (list) => {
+        this.farms = list || [];
+        // ensure map layers exist if mainMap already initialized
+        setTimeout(() => this.ensureFarmLayers(), 50);
+      },
+      error: (err) => {
+        console.error('Failed to load farms', err);
+      }
+    });
   }
 
   // Table helpers
@@ -218,7 +255,9 @@ export class CreateFarmComponent implements AfterViewInit, OnDestroy {
     const q = this.searchTerm.trim().toLowerCase();
     let list = this.farms.filter(f => {
       if (!q) return true;
-      return f.farmName.toLowerCase().includes(q) || f.farmerName.toLowerCase().includes(q) || f.phone.toLowerCase().includes(q);
+      return (f.farmName || '').toLowerCase().includes(q)
+        || (f.farmerName || '').toLowerCase().includes(q)
+        || (f.phone || '').toLowerCase().includes(q);
     });
     if (this.sortField) {
       list = list.sort((a: any, b: any) => {
@@ -251,14 +290,26 @@ export class CreateFarmComponent implements AfterViewInit, OnDestroy {
 
   delete(farm: Farm) {
     if (!confirm(`Delete farm "${farm.farmName}"? This cannot be undone.`)) return;
-    this.farms = this.farms.filter(f => f.id !== farm.id);
-    const layer = this.farmLayers.get(farm.id);
-    if (layer) this.mainMap.removeLayer(layer);
-    this.farmLayers.delete(farm.id);
+    if (farm.id == null) return;
+    const id = farm.id;
+    // call backend delete
+    this.farmService.deleteFarm(id).subscribe({
+      next: () => {
+        this.farms = this.farms.filter(f => f.id !== id);
+        const layer = this.farmLayers.get(id);
+        if (layer && this.mainMap) this.mainMap.removeLayer(layer);
+        this.farmLayers.delete(id);
+      },
+      error: (err) => {
+        console.error('Failed to delete farm', err);
+        alert('Failed to delete farm: ' + (err?.message || err?.statusText || 'Unknown'));
+      }
+    });
   }
 
   viewOnMap(farm: Farm) {
     if (!farm.polygon || !this.mainMap) return alert('No polygon available for this farm');
+    if (farm.id == null) return;
     const layer = this.farmLayers.get(farm.id);
     if (layer) {
       this.mainMap.fitBounds(layer.getBounds(), { padding: [20, 20] });
@@ -273,24 +324,28 @@ export class CreateFarmComponent implements AfterViewInit, OnDestroy {
       const stats = this.fakeStats();
       layer.bindPopup(`<strong>${farm.farmName}</strong><br/>Farmer: ${farm.farmerName}<br/>Area: ${farm.area} ha<br/>NDVI: ${stats.ndvi}<br/>NDWI: ${stats.ndwi}`).openPopup();
     });
+    if (farm.id == null) return;
     this.farmLayers.set(farm.id, layer);
   }
 
   private updateFarmLayer(farm: Farm) {
+    if (farm.id == null) return;
     const existing = this.farmLayers.get(farm.id);
-    if (existing) this.mainMap.removeLayer(existing);
+    if (existing && this.mainMap) this.mainMap.removeLayer(existing);
     if (farm.polygon) this.addFarmLayer(farm);
   }
 
   // Called after modal closes / when adding farms to ensure layers present
   private ensureFarmLayers() {
     this.farms.forEach(f => {
+      if (f.id == null) return;
       if (f.polygon && !this.farmLayers.has(f.id) && this.mainMap) this.addFarmLayer(f);
     });
   }
 
   // Hover highlight
   highlight(farm: Farm, on: boolean) {
+    if (farm.id == null) return;
     const layer = this.farmLayers.get(farm.id);
     if (!layer) return;
     layer.setStyle({ weight: on ? 4 : 2, color: on ? '#ff0000' : '#2b8cbe' });
@@ -310,5 +365,5 @@ export class CreateFarmComponent implements AfterViewInit, OnDestroy {
   }
 
   // Keep map layers in sync when farms list changes
-  trackById(i: number, f: Farm) { return f.id; }
+  trackById(i: number, f: Farm) { return f.id ?? i; }
 }

@@ -21,4 +21,12 @@ export class UserService {
 	register(email: string, password: string, role?: string): Observable<any> {
 		return this.http.post(`${this.baseUrl}/register`, { email, password, role });
 	}
+
+	listUsers(): Observable<User[]> {
+		return this.http.get<User[]>(`${this.baseUrl}/users`);
+	}
+
+	updateRole(email: string, role: string): Observable<User> {
+		return this.http.put<User>(`${this.baseUrl}/users/role`, { email, role });
+	}
 }

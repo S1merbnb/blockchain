@@ -11,6 +11,7 @@ import { PendingEventsComponent } from './admin/pending-events/pending-events.co
 import { ReportsComponent } from './admin/reports/reports.component';
 import { CreateFarmComponent } from './admin/create-farm/create-farm.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { RoleGuard } from './shared/guards/role.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -18,12 +19,12 @@ const routes: Routes = [
   { path: 'weather-widget', component: WeatherWidgetComponent },
   { path: 'login', component: LoginComponent },
   { path: 'contact-us', component: ContactUsComponent },
-  { path: 'dashboard', component: DashboardComponent ,children: [
+  { path: 'dashboard', component: DashboardComponent , canActivateChild: [RoleGuard], data: { allowedRoles: ['ADMIN','SUPERADMIN'] }, children: [
     { path: 'pending-events', component: PendingEventsComponent },
     { path: 'blockchain-log', component: BlockchainLogComponent },
     { path: 'reports', component: ReportsComponent },
     { path: 'create-farm', component: CreateFarmComponent },
-    { path: 'register', component: RegisterComponent }
+    { path: 'register', component: RegisterComponent, data: { allowedRoles: ['SUPERADMIN'] } }
   ] }
 ];
 

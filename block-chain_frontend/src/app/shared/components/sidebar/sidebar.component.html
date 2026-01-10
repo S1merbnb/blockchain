@@ -9,7 +9,7 @@
 		<a routerLink="/dashboard/blockchain-log" routerLinkActive="active">Blockchain Log</a>
 		<a routerLink="/dashboard/reports" routerLinkActive="active">Reports</a>
 		<a routerLink="/dashboard/create-farm" routerLinkActive="active">Create Farm</a>
-		<a routerLink="/dashboard/register" routerLinkActive="active">Register</a>
+		<a *ngIf="userRole === 'SUPERADMIN'" routerLink="/dashboard/register" routerLinkActive="active">Register</a>
 	</nav>
 
 	<div class="sidebar-footer">

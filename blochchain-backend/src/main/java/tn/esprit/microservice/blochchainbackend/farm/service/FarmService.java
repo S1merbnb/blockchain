@@ -28,4 +28,24 @@ public class FarmService {
     public List<Farm> getAllFarms() {
         return farmRepository.findAll();
     }
+
+    public java.util.Optional<Farm> updateFarm(Long id, Farm incoming) {
+        return farmRepository.findById(id).map(existing -> {
+            // update mutable fields
+            existing.setName(incoming.getName());
+            existing.setFarmerName(incoming.getFarmerName());
+            existing.setFarmerPhone(incoming.getFarmerPhone());
+            existing.setCropType(incoming.getCropType());
+            existing.setArea(incoming.getArea());
+            existing.setNotes(incoming.getNotes());
+            existing.setPolygon(incoming.getPolygon());
+            return farmRepository.save(existing);
+        });
+    }
+
+    public boolean deleteFarm(Long id) {
+        if (!farmRepository.existsById(id)) return false;
+        farmRepository.deleteById(id);
+        return true;
+    }
 }
