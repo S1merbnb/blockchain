@@ -25,7 +25,7 @@ import java.util.Collections;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     // Keep in sync with UserController.JWT_SECRET
-    private static final String JWT_SECRET = "replace-this-with-a-secure-random-secret";
+    private static final String JWT_SECRET = "9f2c7a4b3d8e6f1a5c2b9d0e4f7a6b8c1d3e5f7091a2b4c6d8e0f1234567890a";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

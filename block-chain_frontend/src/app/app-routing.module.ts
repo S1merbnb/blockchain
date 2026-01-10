@@ -20,10 +20,10 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'contact-us', component: ContactUsComponent },
   { path: 'dashboard', component: DashboardComponent , canActivateChild: [RoleGuard], data: { allowedRoles: ['ADMIN','SUPERADMIN'] }, children: [
-    { path: 'pending-events', component: PendingEventsComponent },
-    { path: 'blockchain-log', component: BlockchainLogComponent },
-    { path: 'reports', component: ReportsComponent },
-    { path: 'create-farm', component: CreateFarmComponent },
+    { path: 'pending-events', component: PendingEventsComponent , data: { allowedRoles: ['ADMIN','SUPERADMIN'] }},
+    { path: 'blockchain-log', component: BlockchainLogComponent , data: { allowedRoles: ['ADMIN','SUPERADMIN'] }},
+    { path: 'reports', component: ReportsComponent , data: { allowedRoles: ['ADMIN','SUPERADMIN'] }},
+    { path: 'create-farm', component: CreateFarmComponent, data: { allowedRoles: ['ADMIN','SUPERADMIN'] } },
     { path: 'register', component: RegisterComponent, data: { allowedRoles: ['SUPERADMIN'] } }
   ] }
 ];

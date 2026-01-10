@@ -95,7 +95,7 @@ public class UserController {
 		List<UserDto> out = users.stream().map(UserDto::new).collect(Collectors.toList());
 		return ResponseEntity.ok(out);
 	}
-	
+
 
 	@PutMapping("/users/role")
 	public ResponseEntity<?> updateRoleByEmail(@RequestBody Map<String, String> body) {
